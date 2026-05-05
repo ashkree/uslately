@@ -1,9 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./index.css";
 import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <main className="min-h-screen flex justify-center bg-gray-100">
+      <div className="w-full max-w-3xl px-4 py-8 flex flex-col gap-6">
+        <App />
+      </div>
+    </main>
   </StrictMode>,
 );
