@@ -1,20 +1,44 @@
-export type PostType = "music" | "photo";
+export type PostType = 'music' | 'movie' | 'article'
 
 export interface Post {
-  id: string;
-  type: PostType;
-  title: string;
-  sub?: string;
-  note: string;
-  sender: string;
-  image_url?: string;
-  created_at: string;
+  id: string
+  type: PostType
+  title: string
+  sub?: string
+  note: string
+  sender: string
+  url?: string
+  created_at: string
 }
 
+export const TYPE_CONFIG = {
+  music: {
+    label: 'music',
+    icon: '♪',
+    description: 'share a song',
+    accent: '#7eb8a4',
+    subPlaceholder: 'artist',
+  },
+  movie: {
+    label: 'movie',
+    icon: '▶︎',
+    description: 'share a movie',
+    accent: '#7a9ec4',
+    subPlaceholder: 'year',
+  },
+  article: {
+    label: 'article',
+    icon: '▶︎',
+    description: 'share a movie',
+    accent: '#7a9ec4',
+    subPlaceholder: 'year',
+  },
+} as const
+
 export interface Reply {
-  id: string;
-  post_id: string;
-  author: string;
-  text: string;
-  created_at: string;
+  id: string
+  post_id: string
+  author: string
+  text: string
+  created_at: string
 }

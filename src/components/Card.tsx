@@ -1,96 +1,15 @@
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "../lib/supabase";
-import type { Post, Reply } from "../types";
-
-interface CardProps {
-  post: Post;
-  currentUser: string;
-}
-
-export default function Card({ post, currentUser }: CardProps) {
-  const [replies, setReplies] = useState<Reply[]>([]);
-  const [replyText, setReplyText] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const fetchReplies = useCallback(async () => {
-    const { data } = await supabase
-      .from("replies")
-      .select("*")
-      .eq("post_id", post.id)
-      .order("created_at", { ascending: true });
-    if (data) setReplies(data);
-  }, [post.id]);
-
-  useEffect(() => {
-    fetchReplies();
-
-    const channel = supabase
-      .channel(`replies:${post.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "replies",
-          filter: `post_id=eq.${post.id}`,
-        },
-        fetchReplies,
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [fetchReplies, post.id]);
-
-  const handleReply = async () => {
-    if (!replyText) return;
-    setLoading(true);
-
-    await supabase.from("replies").insert({
-      post_id: post.id,
-      author: currentUser,
-      text: replyText,
-    });
-
-    setReplyText("");
-    setLoading(false);
-  };
-
+export default function Card() {
   return (
-    <div className="bg-gray-50 shadow-md p-6 rounded-lg flex flex-col gap-5">
+    <div className='border-2 border-[#e0c8d8] bg-[#fffaf8] shadow-md p-6 rounded-lg flex flex-col gap-5'>
       <div>
-        <span className="text-sm text-gray-500 italic">
-          {" "}
-          {post.type} · {post.sender}{" "}
-        </span>
-        <h2 className="text-2xl text-medium">{post.title}</h2>
-        {post.sub && <p className="text-sm text-gray-500">{post.sub}</p>}
-      </div>
-      <div>
-        <p className="text-base italic text-zinc-950">"{post.note}"</p>
-      </div>
-      {post.type === "photo" && post.image_url && (
-        <img src={post.image_url} alt={post.title} />
-      )}
+        <span className='text-sm text-[#a07090] italic'>music · Him · Today</span>
+        <h2 className='text-2xl text-medium text-[#3d2435] '> Song Name </h2>
 
-      <div>
-        {replies.map((reply) => (
-          <div key={reply.id}>
-            <strong>{reply.author}</strong>
-            <span>{reply.text}</span>
-          </div>
-        ))}
+        <p className='text-sm text-[#7a5c72]'>Artist Name</p>
       </div>
-
-      <input
-        placeholder="reply..."
-        value={replyText}
-        onChange={(e) => setReplyText(e.target.value)}
-      />
-      <button onClick={handleReply} disabled={loading}>
-        {loading ? "..." : "reply"}
-      </button>
+      <div>
+        <p className='text-base italic text-[#3d2435]'>"A good song I heard recently"</p>
+      </div>
     </div>
-  );
+  )
 }
