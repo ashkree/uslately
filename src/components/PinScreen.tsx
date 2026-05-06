@@ -114,6 +114,7 @@ export default function PinScreen({ onAuth, initialUser }: PinScreenProps) {
 
   const handlePickName = (picked: AppUser) => {
     setUser(picked)
+    setStep('enter_pin')
     setError('')
     setDigits('')
   }
