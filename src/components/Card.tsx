@@ -18,13 +18,25 @@ export default function Card({ post }: CardProps) {
         <span className='text-sm text-[#a07090] italic'>
           {post.type} · {post.sender} · {date}
         </span>
-        <h2 className='text-2xl text-medium text-[#3d2435] '>{post.title}</h2>
+
+        <h2 className='text-2xl text-medium text-[#3d2435]'>{post.title}</h2>
 
         {post.sub && <p className='text-sm text-[#7a5c72]'>{post.sub}</p>}
       </div>
+
+      {/* Photo image - only shown for photo posts */}
+      {post.type === 'photo' && post.image_url && (
+        <img
+          src={post.image_url}
+          alt={post.title || 'shared photo'}
+          className='w-full max-h-72 rounded-lg object-cover border border-[#e0c8d8]'
+        />
+      )}
+
       <div>
         <p className='text-base italic text-[#3d2435]'>"{post.note}"</p>
       </div>
+
       {post.url && (
         <a
           href={post.url}

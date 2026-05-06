@@ -1,4 +1,4 @@
-export type PostType = 'music' | 'movie' | 'article'
+export type PostType = 'music' | 'movie' | 'article' | 'photo'
 
 export interface Post {
   id: string
@@ -8,6 +8,7 @@ export interface Post {
   note: string
   sender: string
   url?: string
+  image_url?: string
   created_at: string
 }
 
@@ -24,17 +25,25 @@ export const TYPE_CONFIG = {
     label: 'movie',
     icon: '▶︎',
     description: 'share a movie',
-    accent: '#7a9ec4',
-    subPlaceholder: 'year',
-    urlPrompt: 'watch',
+    accent: '#c9a96e',
+    subPlaceholder: 'director / year',
+    urlPrompt: 'view',
   },
   article: {
     label: 'article',
-    icon: '',
+    icon: '✦',
     description: 'share an article',
     accent: '#7a9ec4',
-    subPlaceholder: 'author',
+    subPlaceholder: 'author / publication',
     urlPrompt: 'read',
+  },
+  photo: {
+    label: 'photo',
+    icon: '◎',
+    description: 'share a photo',
+    accent: '#b07aa0',
+    subPlaceholder: 'caption (optional)',
+    urlPrompt: '',
   },
 } as const
 
