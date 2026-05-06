@@ -1,21 +1,13 @@
 // src/components/PinScreen.tsx
 import { useEffect, useState } from 'react'
-import {
-  USERS,
-  type AppUser,
-  hasPinSet,
-  savePinHash,
-  verifyPin,
-  setSessionUser,
-  setDeviceUser,
-} from '../lib/auth'
+import { USERS, type AppUser, signIn, setDeviceUser } from '../lib/auth'
 
 interface PinScreenProps {
   onAuth: (user: AppUser) => void
   initialUser?: AppUser | null
 }
 
-type Step = 'pick_name' | 'set_pin' | 'confirm_pin' | 'enter_pin'
+type Step = 'pick_name' | 'enter_pin'
 
 const PIN_LENGTH = 4
 
@@ -107,43 +99,16 @@ export default function PinScreen({ onAuth, initialUser }: PinScreenProps) {
 
   const handlePinComplete = async (completed: string) => {
     if (!user) return
-
-    if (step === 'set_pin') {
-      setFirstDigits(completed)
-      setDigits('')
-      setStep('confirm_pin')
-      return
-    }
-
-    if (step === 'confirm_pin') {
-      if (completed !== firstDigits) {
-        triggerShake()
-        setDigits('')
-        setError("PINs don't match — try again")
-        return
-      }
-      setLoading(true)
-      await savePinHash(user, completed)
+    setLoading(true)
+    const ok = await signIn(user, completed)
+    setLoading(false)
+    if (ok) {
       setDeviceUser(user)
-      setSessionUser(user)
-      setLoading(false)
       onAuth(user)
-      return
-    }
-
-    if (step === 'enter_pin') {
-      setLoading(true)
-      const ok = await verifyPin(user, completed)
-      setLoading(false)
-      if (ok) {
-        setDeviceUser(user)
-        setSessionUser(user)
-        onAuth(user)
-      } else {
-        triggerShake()
-        setDigits('')
-        setError('Wrong PIN — try again')
-      }
+    } else {
+      triggerShake()
+      setDigits('')
+      setError('Wrong PIN — try again')
     }
   }
 
@@ -151,7 +116,6 @@ export default function PinScreen({ onAuth, initialUser }: PinScreenProps) {
     setUser(picked)
     setError('')
     setDigits('')
-    setStep(hasPinSet(picked) ? 'enter_pin' : 'set_pin')
   }
 
   const handleBack = () => {
@@ -164,15 +128,11 @@ export default function PinScreen({ onAuth, initialUser }: PinScreenProps) {
 
   const headings: Record<Step, string> = {
     pick_name: 'who are you?',
-    set_pin: 'create a pin',
-    confirm_pin: 'confirm your pin',
     enter_pin: 'welcome back',
   }
 
   const subheadings: Record<Step, string> = {
     pick_name: '',
-    set_pin: "you'll use this every time you open the app",
-    confirm_pin: 'enter it once more',
     enter_pin: `enter your pin, ${user?.toLowerCase() ?? ''}`,
   }
 

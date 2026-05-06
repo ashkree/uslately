@@ -1,34 +1,39 @@
-// src/lib/auth.ts
+import { supabase } from './supabase'
+
 export const USERS = ['Him', 'Her'] as const
 export type AppUser = (typeof USERS)[number]
 
-const SESSION_KEY = 'uslately_session'
 const DEVICE_USER_KEY = 'uslately_device_user'
-const pinKey = (name: AppUser) => `uslately_pin_${name}`
 
-async function hashPin(pin: string): Promise<string> {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin))
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
+const salt = import.meta.env.VITE_PIN_SALT
+
+function buildPassword(pin: string): string {
+  return `${pin}${salt}`
 }
 
-export function hasPinSet(user: AppUser): boolean {
-  return !!localStorage.getItem(pinKey(user))
+function emailForUser(user: AppUser): string {
+  return `${user.toLowerCase()}@uslately.app`
 }
 
-/** Store a hashed PIN for a user */
-export async function savePinHash(user: AppUser, pin: string): Promise<void> {
-  const hash = await hashPin(pin)
-  localStorage.setItem(pinKey(user), hash)
+export async function signIn(user: AppUser, pin: string): Promise<boolean> {
+  const { error } = await supabase.auth.signInWithPassword({
+    email: emailForUser(user),
+    password: buildPassword(pin),
+  })
+  return !error
 }
 
-/** Returns true if the PIN matches the stored hash */
-export async function verifyPin(user: AppUser, pin: string): Promise<boolean> {
-  const stored = localStorage.getItem(pinKey(user))
-  if (!stored) return false
-  const hash = await hashPin(pin)
-  return hash === stored
+export async function signOut(): Promise<void> {
+  await supabase.auth.signOut()
+  localStorage.removeItem(DEVICE_USER_KEY)
+}
+
+export async function getSessionUser(): Promise<AppUser | null> {
+  const { data } = await supabase.auth.getSession()
+  if (!data.session) return null
+  const email = data.session.user.email
+  const match = USERS.find((u) => emailForUser(u) === email)
+  return match ?? null
 }
 
 export function getDeviceUser(): AppUser | null {
@@ -38,17 +43,4 @@ export function getDeviceUser(): AppUser | null {
 
 export function setDeviceUser(user: AppUser): void {
   localStorage.setItem(DEVICE_USER_KEY, user)
-}
-
-export function getSessionUser(): AppUser | null {
-  const val = sessionStorage.getItem(SESSION_KEY)
-  return USERS.includes(val as AppUser) ? (val as AppUser) : null
-}
-
-export function setSessionUser(user: AppUser): void {
-  sessionStorage.setItem(SESSION_KEY, user)
-}
-
-export function clearSession(): void {
-  sessionStorage.removeItem(SESSION_KEY)
 }
