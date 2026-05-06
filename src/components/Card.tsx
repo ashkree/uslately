@@ -58,12 +58,18 @@ export default function Card({ post, currentUser }: CardProps) {
   };
 
   return (
-    <div>
-      <span>{post.type}</span>
-      <h2>{post.title}</h2>
-      {post.sub && <p>{post.sub}</p>}
-      <p>{post.note}</p>
-      <span>{post.sender}</span>
+    <div className="bg-gray-50 shadow-md p-6 rounded-lg flex flex-col gap-5">
+      <div>
+        <span className="text-sm text-gray-500 italic">
+          {" "}
+          {post.type} · {post.sender}{" "}
+        </span>
+        <h2 className="text-2xl text-medium">{post.title}</h2>
+        {post.sub && <p className="text-sm text-gray-500">{post.sub}</p>}
+      </div>
+      <div>
+        <p className="text-base italic text-zinc-950">"{post.note}"</p>
+      </div>
       {post.type === "photo" && post.image_url && (
         <img src={post.image_url} alt={post.title} />
       )}

@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+  --color-parchment-50: oklch(0.964 0.015 90.19);
+  --color-parchment-100: oklch(0.934 0.032 91.01);
+  --color-parchment-200: oklch(0.845 0.051 93.42);
+  --color-parchment-300: oklch(0.758 0.046 91.3);
+  --color-parchment-400: oklch(0.673 0.041 92.32);
+  --color-parchment-500: oklch(0.577 0.035 91.12);
+  --color-parchment-600: oklch(0.493 0.03 92.57);
+  --color-parchment-700: oklch(0.406 0.025 91.78);
+  --color-parchment-800: oklch(0.318 0.018 88.8);
+  --color-parchment-900: oklch(0.223 0.014 87.55);
+  --color-parchment-950: oklch(0.177 0.01 97.91);
+}
