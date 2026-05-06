@@ -6,6 +6,7 @@ interface ShareModalProps {
   type: PostType
   currentUser: string
   onClose: () => void
+  onSuccess: () => void
 }
 
 interface FormState {
@@ -17,7 +18,7 @@ interface FormState {
 
 const EMPTY_FORM: FormState = { title: '', sub: '', note: '', url: '' }
 
-export default function ShareModal({ type, currentUser, onClose }: ShareModalProps) {
+export default function ShareModal({ type, currentUser, onClose, onSuccess }: ShareModalProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
   const [loading, setLoading] = useState(false)
 
@@ -27,7 +28,7 @@ export default function ShareModal({ type, currentUser, onClose }: ShareModalPro
     if (!form.title || !form.note) return
     setLoading(true)
 
-    await supabase.from('posts').insert({
+    const { error } = await supabase.from('posts').insert({
       type,
       title: form.title,
       sub: form.sub || null,
@@ -37,6 +38,10 @@ export default function ShareModal({ type, currentUser, onClose }: ShareModalPro
     })
 
     setLoading(false)
+
+    if (!error) {
+      onSuccess()
+    }
     onClose()
   }
 

@@ -18,6 +18,7 @@ export const TYPE_CONFIG = {
     description: 'share a song',
     accent: '#7eb8a4',
     subPlaceholder: 'artist',
+    urlPrompt: 'listen',
   },
   movie: {
     label: 'movie',
@@ -25,13 +26,15 @@ export const TYPE_CONFIG = {
     description: 'share a movie',
     accent: '#7a9ec4',
     subPlaceholder: 'year',
+    urlPrompt: 'watch',
   },
   article: {
     label: 'article',
-    icon: '▶︎',
-    description: 'share a movie',
+    icon: '',
+    description: 'share an article',
     accent: '#7a9ec4',
-    subPlaceholder: 'year',
+    subPlaceholder: 'author',
+    urlPrompt: 'read',
   },
 } as const
 
