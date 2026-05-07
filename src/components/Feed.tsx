@@ -85,10 +85,11 @@ export default function Feed({ currentUser, onSignOut }: FeedProps) {
       {loading && <p className='text-[#a07090]'>Loading...</p>}
       {error && <p className='text-red-500'>{error}</p>}
 
-      {!loading && !error && posts.map((post) => <Card key={post.id} post={post} />)}
+      {!loading &&
+        !error &&
+        posts.map((post) => <Card key={post.id} post={post} currentUser={currentUser} />)}
 
       <ShareFAB currentUser={currentUser} onShareSuccess={reloadFeed} />
     </div>
   )
 }
-
