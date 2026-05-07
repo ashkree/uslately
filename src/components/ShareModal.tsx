@@ -106,10 +106,13 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
     onClose()
   }
 
+  const hasNote = form.note.trim().length > 0
   const isValid =
-    type === 'photo' ? !!photoFile && !!form.note.trim()
-    : type === 'thought' ? !!form.note.trim()
-    : !!form.title.trim() && !!form.note.trim()
+    type === 'photo'
+      ? !!photoFile && hasNote
+      : type === 'thought'
+        ? hasNote
+        : form.title.trim().length > 0 && hasNote
 
   const progressLabel =
     uploadProgress < 60
@@ -239,7 +242,7 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
             <textarea
               value={form.note}
               onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))}
-              placeholder='why this one…'
+              placeholder={type === 'thought' ? "what's on your mind?" : 'why this one…'}
               rows={2}
               className="w-full resize-none rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
             />
