@@ -76,7 +76,7 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
   const handleSubmit = async () => {
     if (!form.note) return
     if (type === 'photo' && !photoFile) return
-    if (type !== 'photo' && !form.title) return
+    if (type !== 'photo' && type !== 'thought' && !form.title) return
 
     setLoading(true)
 
@@ -93,7 +93,7 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
 
     const { error } = await supabase.from('posts').insert({
       type,
-      title: form.title,
+      title: type === 'thought' ? 'thought' : form.title,
       sub: form.sub || null,
       note: form.note,
       url: form.url || null,
