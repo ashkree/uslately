@@ -241,8 +241,8 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
             />
           </div>
 
-          {/* url — movie + article only */}
-          {(type === 'movie' || type === 'article') && (
+          {/* url — only shown if cfg.urlPrompt is set */}
+          {cfg.urlPrompt && (
             <div>
               <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
                 link (optional)

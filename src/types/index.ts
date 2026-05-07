@@ -1,4 +1,4 @@
-export type PostType = 'music' | 'movie' | 'article' | 'photo'
+export type PostType = 'music' | 'movie' | 'article' | 'photo' | 'thought'
 
 export interface Post {
   id: string
@@ -42,6 +42,14 @@ export const TYPE_CONFIG = {
     icon: '◎',
     description: 'share a photo',
     accent: '#b07aa0',
+    subPlaceholder: 'caption (optional)',
+    urlPrompt: '',
+  },
+  thought: {
+    label: 'thought',
+    icon: '○',
+    description: 'share a thought',
+    accent: '#9eb4c4',
     subPlaceholder: 'caption (optional)',
     urlPrompt: '',
   },

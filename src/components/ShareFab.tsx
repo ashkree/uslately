@@ -7,7 +7,7 @@ interface ShareFABProps {
   onShareSuccess: () => void
 }
 
-const TYPE_ORDER: PostType[] = ['music', 'movie', 'article', 'photo']
+const TYPE_ORDER: PostType[] = ['music', 'movie', 'article', 'photo', 'thought']
 
 export default function ShareFAB({ currentUser, onShareSuccess }: ShareFABProps) {
   const [fabOpen, setFabOpen] = useState(false)
