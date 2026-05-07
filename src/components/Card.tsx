@@ -79,9 +79,11 @@ export default function Card({ post, currentUser }: CardProps) {
           {post.type} · {post.sender} · {date}
         </span>
 
-        <h2 className='text-2xl text-medium text-[#3d2435]'>{post.title}</h2>
+        {post.type !== 'thought' && post.title && (
+          <h2 className='text-2xl text-medium text-[#3d2435]'>{post.title}</h2>
+        )}
 
-        {post.sub && <p className='text-sm text-[#7a5c72]'>{post.sub}</p>}
+        {post.type !== 'thought' && post.sub && <p className='text-sm text-[#7a5c72]'>{post.sub}</p>}
       </div>
 
       {/* Photo image */}

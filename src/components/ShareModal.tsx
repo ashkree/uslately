@@ -107,7 +107,9 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
   }
 
   const isValid =
-    type === 'photo' ? !!photoFile && !!form.note.trim() : !!form.title.trim() && !!form.note.trim()
+    type === 'photo' ? !!photoFile && !!form.note.trim()
+    : type === 'thought' ? !!form.note.trim()
+    : !!form.title.trim() && !!form.note.trim()
 
   const progressLabel =
     uploadProgress < 60
@@ -198,32 +200,36 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
             </>
           )}
 
-          {/* title */}
-          <div>
-            <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
-              title
-            </label>
-            <input
-              autoFocus
-              value={form.title}
-              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-              placeholder='title'
-              className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
-            />
-          </div>
+          {/* title — not for photo or thought */}
+          {type !== 'photo' && type !== 'thought' && (
+            <div>
+              <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
+                title
+              </label>
+              <input
+                autoFocus
+                value={form.title}
+                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                placeholder='title'
+                className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
+              />
+            </div>
+          )}
 
-          {/* sub — artist / director / caption */}
-          <div>
-            <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
-              {cfg.subPlaceholder}
-            </label>
-            <input
-              value={form.sub}
-              onChange={(e) => setForm((f) => ({ ...f, sub: e.target.value }))}
-              placeholder={cfg.subPlaceholder}
-              className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
-            />
-          </div>
+          {/* sub — not for thought */}
+          {type !== 'thought' && (
+            <div>
+              <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
+                {cfg.subPlaceholder}
+              </label>
+              <input
+                value={form.sub}
+                onChange={(e) => setForm((f) => ({ ...f, sub: e.target.value }))}
+                placeholder={cfg.subPlaceholder}
+                className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
+              />
+            </div>
+          )}
 
           {/* note */}
           <div>
