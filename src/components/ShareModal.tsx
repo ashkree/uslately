@@ -93,7 +93,7 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
 
     const { error } = await supabase.from('posts').insert({
       type,
-      title: type === 'photo' ? form.title || 'photo' : form.title,
+      title: form.title,
       sub: form.sub || null,
       note: form.note,
       url: form.url || null,
@@ -198,21 +198,19 @@ export default function ShareModal({ type, currentUser, onClose, onSuccess }: Sh
             </>
           )}
 
-          {/* title — not shown for photo (auto-filled) */}
-          {type !== 'photo' && (
-            <div>
-              <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
-                title
-              </label>
-              <input
-                autoFocus
-                value={form.title}
-                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                placeholder='title'
-                className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
-              />
-            </div>
-          )}
+          {/* title */}
+          <div>
+            <label className="mb-1 block font-['DM_Sans'] text-[11px] uppercase tracking-widest text-[#a07090]">
+              title
+            </label>
+            <input
+              autoFocus
+              value={form.title}
+              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+              placeholder='title'
+              className="w-full rounded-lg border border-[#d9b8d3] bg-white px-3 py-2 font-['DM_Sans'] text-sm text-[#3d2435] outline-none focus:border-[#b07aa0] transition-colors"
+            />
+          </div>
 
           {/* sub — artist / director / caption */}
           <div>
